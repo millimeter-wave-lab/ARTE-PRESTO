@@ -1,0 +1,6 @@
+matplotlib
+pandas
+requests
+sigpyproc@ git+https://github.com/FRBs/sigpyproc3.git
+tqdm
+your

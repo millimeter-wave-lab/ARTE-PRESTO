@@ -1,0 +1,8 @@
+[console_scripts]
+candidates = frb_search.candidates:main
+cands_classifier = frb_search.cands_classifier:main
+converter = frb_search.converter:main
+frb_search = frb_search.frb_search:main
+plot_waterfall = frb_search.plot_waterfall:main
+simulate_pulse = frb_search.simulate_pulse:main
+voltage_sim = frb_search.voltage_sim:main
