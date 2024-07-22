@@ -1,0 +1,288 @@
+--Install singularity--
+https://apptainer.org/admin-docs/master/installation.html#installation-on-linux
+0. Install dependencies
+-  sudo apt-get update && sudo apt-get install -y \
+    build-essential \
+    libssl-dev \
+    uuid-dev \
+    libgpgme11-dev \
+    squashfs-tools \
+    libseccomp-dev \
+    wget \
+    pkg-config \
+    git \
+    cryptsetup
+
+
+1. Install go
+https://go.dev/doc/install
+-Download tar (then in the directory where the tar is, in my case I downloaded it to/home/cristobalb/go_install)
+- tar -C /home/cristobalb/go_install -xzf go1.21.6.linux-amd64.tar.gz
+- export PATH=$PATH:/home/cristobalb/go_install/go/bin
+- go version (if this works then all good)
+
+2. Install singularity
+https://github.com/apptainer/singularity/releases
+- tar -xzf singularity-3.8.7.tar.gz
+
+- ./mconfig && \
+    make -C ./builddir && \
+    sudo make -C ./builddir install (In directory where mconfig is, you should look for a folder named singularity-3.8.7 or similar)
+- singularity exec library://alpine cat /etc/alpine-release
+- singularity --help (If this works then you are done!)
+
+3.Install an image with useful commands:
+singularity pull --arch amd64 library://josephwkania/radio_transients/radio_transients:latest (filterbank, header, reader)
+singularity pull shub://federatedcloud/singularity-PRESTO:latest (This is the latest PRESTO version we are using)
+For dspsr.sif ask Cristóbal
+
+4. Go to bashrc file and copy the aliases for the commands with your actual path to the .sif or .simg file. Examples of the most used commands, you need to change the path to your actual presto images path and files.
+
+--alias radio_transients_latest.sif commands--
+
+alias header='singularity exec --bind $PWD /home/cristobal.braga/singularity/radio_transients_latest.sif header'
+alias dedisperse='singularity exec --bind $PWD /home/cristobal.braga/singularity/radio_transients_latest.sif dedisperse'
+alias filterbank='singularity exec --bind $PWD /home/cristobal.braga/singularity/radio_transients_latest.sif filterbank'
+alias reader='singularity exec --bind $PWD /home/cristobal.braga/singularity/radio_transients_latest.sif reader'
+alias digifits='singularity exec --bind $PWD /home/cristobal.braga/singularity/radio_transients_latest.sif digifits'
+--
+
+--alias presto.simg and dspsr.sif commands--
+
+alias sing='singularity exec --bind $PWD /home/cristobalb/presto_image/presto.simg '
+alias rfifind='singularity exec --bind $PWD /home/cristobalb/presto_image/presto.simg rfifind'
+alias waterfaller.py='singularity exec --bind $PWD /home/cristobalb/presto_image/presto.simg waterfaller.py'
+alias readfile='singularity exec --bind $PWD /home/cristobalb/presto_image/presto.simg readfile'
+alias prepdata='singularity exec --bind $PWD /home/cristobalb/presto_image/presto.simg prepdata'
+alias prepsubband='singularity exec --bind $PWD /home/cristobalb/presto_image/presto.simg prepsubband'
+alias DDplan.py='singularity exec --bind $PWD /home/cristobalb/presto_image/presto.simg DDplan.py'
+alias accelsearch='singularity exec --bind $PWD /home/cristobalb/presto_image/presto.simg accelsearch'
+alias single_pulse_search.py='singularity exec --bind $PWD /home/cristobalb/presto_image/presto.simg single_pulse_search.py'
+alias prepfold='singularity exec --bind $PWD /home/cristobalb/presto_image/presto.simg prepfold'
+alias show_pfd='singularity exec --bind $PWD /home/cristobalb/presto_image/presto.simg show_pfd'
+alias explorefft='singularity exec --bind $PWD /home/cristobalb/presto_image/presto.simg explorefft'
+alias realfft='singularity exec --bind $PWD /home/cristobalb/presto_image/presto.simg realfft'
+alias ACCEL_sift.py='singularity exec --bind $PWD /home/cristobalb/presto_image/presto.simg ACCEL_sift.py'
+alias get_TOAs.py='singularity exec --bind $PWD /home/cristobalb/presto_image/presto.simg get_TOAs.py'
+alias makezaplist.py='singularity exec --bind $PWD /home/cristobalb/presto_image/presto.simg makezaplist.py'
+
+alias dspsr='singularity exec --bind $PWD /home/cristobalb/presto_image/dspsr.sif dspsr'
+alias pazi='singularity exec --bind $PWD /home/cristobalb/presto_image/dspsr.sif pazi'
+alias paz='singularity exec --bind $PWD /home/cristobalb/presto_image/dspsr.sif paz'
+alias pam='singularity exec --bind $PWD /home/cristobalb/presto_image/dspsr.sif pam'
+alias pat='singularity exec --bind $PWD /home/cristobalb/presto_image/dspsr.sif pat'
+alias pav='singularity exec --bind $PWD /home/cristobalb/presto_image/dspsr.sif pav'
+alias paas='singularity exec --bind $PWD /home/cristobalb/presto_image/dspsr.sif paas'
+alias digifil='singularity exec --bind $PWD /home/cristobalb/presto_image/dspsr.sif digifil'
+--
+
+5. After this you should be able to run commands, for example, type rfifind in the terminal, you should get the help message.
+Now here are some examples on how to use presto commands:
+
+--RFIFIND Command --
+
+rfifind -o B0355_output_test -time 2.0 B0355+54_20210929_low.fil
+-o; name of output file
+-time; time of block to process
+file
+--
+B0355_output1_rfifind.mask
+--PREPSUBBAND Command--
+
+prepsubband -nobary -lodm 57 -dmstep 1 -numdms 1 -downsamp 8 -mask B0355_output1_rfifind.mask -nsub 512 -runavg -o B0355_1 B0355+54_20210929_low.fil
+-nobary; no baricenter data
+-lodm; minimum DM to seacrh
+-dmstep; size of each step of DMs
+-numdms; how many DMs to search
+-downsamp; how much to downsample data
+-mask; mask file created by RFIFIND
+-nsub; number to divide bandwith (same as number of channels usually works fine)
+-runavg; no idea what this is xD
+-o; name of output file
+file
+--
+
+
+--SINGLE_PULSE_SEARCH.PY--
+single_pulse_search.py -m 0.02 -t 15 -b B0355_1_DM57.00.dat
+
+-m; maximun boxcar width to search (width of pulse) in seconds
+-t; threshold (S/N)
+-b; don't ignore badblocks
+file
+--
+
+--WATERFALLER.PY--
+
+waterfaller.py B0355+54_20210929_low.fil --show-ts —downsamp=16 --scaleindep --scaledata --mask *.mask -d 57 -T 39 -t 1
+
+file
+--show-ts; display timeseries on top of waterfall
+-downsamp; how much to downsample data
+--scaleindep; divide each freq channel by its own std
+--scaledata; scale data  **In the 2017 version this seems depricated
+--mask; mask file generated in RFIFIND
+-d; DM at which to plot
+-T; start time of waterfall plot
+-t; how much time to plot
+--
+
+--Useful commands--
+
+gv B0355_1_singlepulse.ps (display .ps files)
+
+DDplan.py -l 0 -d 1000 -f 1360 -n 512 -t 0.000054 -r 0.1 (makes a dedispersion plan given some parameters)
+
+-l: low DM
+
+-d: high DM
+
+-f: half of bandpass in MHz
+
+-b: bandwidth in MHz
+
+-n: number of spectral channels
+
+-t: time resolution in seconds
+
+-r: desirable time resolution in miliseconds
+
+dspsr -L 1 -A -D 0 -c 0.15638412  tesst_fits_1 0531+33_20220918_1.fits (folding to see file integrity)
+
+6. Presto pipeline
+After getting familiar with presto commands, you are ready to use the pipeline to automate this process.
+If you have acces to astronomy-laboratory repository and are authenticated in your machine you can run the following command to install the frb_search package:
+(Ignore this one, it will be implemented in the future)
+pip install -U git+https://github.com/astronomy-laboratory/pulse-simulation.git
+
+Or you can download the repository or clone it and then cd to the folder and run pip install
+
+git clone https://github.com/astronomy-laboratory/pulse-simulation.git
+cd path/to/pulse-simulation
+pip install .
+
+After this you should create a config.ini file in the config folder following the config_template.ini. presto_image must contain the path to the presto_image (.sif) and the other fields involve the telegram bot, if you don't want to use the bot just leave those fields empty (but the fileds musty be in the config.ini file).
+
+If everything worked well, then you should be able to type simulate_pulse -h in your terminal and get the help message. Try the same for the frb_search, plot_waterfall and converter to check if they work too.
+
+To convert logfiles to filterbanks use the converter.py routine, it must be run as follows:
+
+converter --path_data /home/cristobalb/test_2/ARTE_test/logfile_to_fil/ --filename '2023-10-07 18_16_51.752602' --telescope ARTE --bandpass 1200 1800 --freq_chann0 0 --time_resolution 0.01 --nbits 32 --nchannels 2048 --flip
+
+--path_data: the absolute path to the folder where the logfiles are
+--path_output: path to where the converted files will be stored
+--filename: the name of specific logfile to convert, if not provided all the files in the path_data folder will be taken and if there are other files or folders it will give an error.
+--telescope: can be any string, e.g., ARTE
+--bandpass: two floats indicating the low frequency and high frequency in the same order the frequency array is made for your data (MHz)
+--freq_chann0: index of frequency of channel 0, for presto to read the frequencies correctly this must be the index of the highest frequency, if bandpass is in ascending order then this is 0.
+--time_resolution: time resolution of your data (s)
+--nbits: this must be 32
+--nchannels: number of frequency channels of your data
+--flip: if your data comes with the frequency of channel 0 being the lowest then for presto to correctly read your file this must be in the command, if your channel 0 corresponds to your highest frequency then you can omit this (hopefully this is working right, if not I fucked up)
+--padding: if you want to extend your file add this flag (this is still being tested)
+--remove_samples: if you want to remove some samples at the beginning of the file you can do it with this flag (this is still being tested)
+
+After converting your logfiles to filterbanks, or if you are a reasonable person that already has filterbanks of PSRFITS and doesn't make up weird formats you can run plot_waterfall.py to plot data:
+
+plot_waterfall --args
+--filename: name of the file (if you are in the same directory as your file) or absolute path to it
+--dm: At what DM to make the plot
+--timestamp: The start time of your plot (s)
+--plot_window: how much time you want to plot (s)
+--save: This flag indicates if you want to save the plot in a pdf file (used when plotting from candidates file)
+--timeseries: This flag is to plot the timeseries at the top of the plot
+--sed: This flag is to plot the mean over time at the right side of the plot
+--from_file: indicate the name of the file you want to plot candidates from (must be a .csv file)
+--num_to_plot: How many candidates to plot from file (default 150)
+--stokes: which Stoke parameter to plot (default I and only for PSRFITS files)
+--downsample: downsampling factor, can be any integer
+--from_candidate: Index at which to start plotting candidates from a candidate file.
+
+candidates --args
+--dt: Time difference at which to separate candidates (s)
+-o: Name of output file
+-s: Save the dataframe as a .csv
+--injection_stats: Flag to calculate the number of true positives and false negatives of a injection
+--injection: Name of the file with injected info (a .txt file obtained from simulate_pulse)
+-p: Name of the file with the candidates obtained from presto
+
+frb_search --args
+--filename: name of the file (you must be in the same directory as your file for presto to work correctly)
+--dm_start: The DM at which start the search.
+--num_dms: How many DMs to search
+--dm_step: Step to separate consecutive DMs
+--downsample: downsampling factor
+--nsub: number of subbands (good to make this equal to number of frequency channels)
+-m: Maximum width of pulses to search
+--dt: Time difference at which to separate candidates (s)
+--plot_window: How much time to plot (s)
+--timeseries: This flag is to plot the timeseries at the top of the plot
+--spectral_average: This flag is to plot the mean over time at the right side of the plot (The same as --sed in plot_waterfall)
+--stokes:  which Stoke parameter to plot (default I and only for PSRFITS files)
+--num_to_plot: How many candidates to plot from file (default 150)
+--mask: Use this flag if you already run rfifind routine and have all the outputs in the same directory as your file
+--save: Use this flag to save the candidates to a PDF file, if not provided, the candidates will be shown one by one.
+
+
+The output of the frb_search script will be a folder named after the file you processed and it will be in the same directory as your file. Inside this folder there will be a summary.txt file with every command and result obtained, a folder named candidates where the PDF file and the two .csv files are saved, a folder named mask where all files from the rfifind routine are saved and a folder named timeseries_sps where all files from prepsubband and single_pulse_search.py are saved.
+
+Aaaaaaand you are done! Finally inspect the PDF file to see your candidates.
+Hopefully you will find many pulsars/FRBs/Radio Transients!!!!!
+
+
+7. Other Scripts
+The package also comes with a script to simulate FRB-like pulses. You can inject them in a filterbak and search for them using the pipeline to test it and make other tests.
+
+simulate_pulse --args
+--bandpass: Min and max frequency of the bandpass (MHz)
+--fref: Reference frequency (MHz)
+--t_i: Start time of the observation string (UTC) (You can leave the default value, this will be changed in a future version)
+--t_tot: Total time of the observation (s)
+--t_p: Time of the pulse(s) (s)
+--f_m: Frequency at which the pulse(s) is centered (MHz)
+--fwhm_f: Full width half max of the pulse(s) in frequency (MHz)
+--fwhm_t: Full width half max of the pulse(s) in time (s)
+--channel_width: Width of the frequency channels (MHz)
+--time_resolution: Time resolution of the instrument (s)
+--dm: Dispersion measure (pc / cm^3)
+--amplitude: Amplitude of the pulse(s)
+--scatt: Add scattering broadening (Still in testing)
+--n_of_events: Number of pulses to generate
+--subburst: Add subburst structure (At a random place near the main pulse)
+--ts: Generate time series plot
+--sed Generate spectral average plot
+--seed: Random seed (Used in injections for replication)
+--noise: Add gaussian noise to the pulse
+--plot: This flag is to plot the pulse
+--injection: Inject pulse into data
+--filename: Name of the file to inject to
+
+If you run the script above without --plot or --injection it will do nothing
+
+voltage_sim --args
+--bandpass: Min and max frequency of the bandpass (MHz)
+--fref: Reference frequency (MHz)
+--t_i: Start time of the observation string (UTC) (You can leave the default value, this will be changed in a future version)
+--t_tot: Total time of the observation (s)
+--t_p: Time of the pulse(s) (s)
+--f_m: Frequency at which the pulse(s) is centered (MHz)
+--fwhm_f: Full width half max of the pulse(s) in frequency (MHz)
+--fwhm_t: Full width half max of the pulse(s) in time (s)
+--channel_width: Width of the frequency channels (MHz)
+--time_resolution: Time resolution of the instrument (s)
+--dm: Dispersion measure (pc / cm^3)
+--amplitude: Amplitude of the pulse
+--scatt: Add scattering broadening (still in testing)
+--n_of_events: Number of pulses to generate
+--subburst: Add subburst structure
+--ts: Generate time series plot
+--axis: Axis for time series plot (0 or 1)
+
+
+
+
+
+
+
+If you read this far send me a :pedro: emoji in Slack
+
