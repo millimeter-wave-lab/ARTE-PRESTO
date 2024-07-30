@@ -204,12 +204,13 @@ candidates --args
 -p: Name of the file with the candidates obtained from presto
 
 frb_search --args
---filename: name of the file (you must be in the same directory as your file for presto to work correctly)
+--filename: name of the file (you must be in the same directory as your file for presto to work correctly). If left blank the program will take all .fil files in the directory.
 --dm_start: The DM at which start the search.
 --num_dms: How many DMs to search
 --dm_step: Step to separate consecutive DMs
 --downsample: downsampling factor
 --nsub: number of subbands (good to make this equal to number of frequency channels)
+--sigma: sigma threshold to search for candidates 
 -m: Maximum width of pulses to search
 --dt: Time difference at which to separate candidates (s)
 --plot_window: How much time to plot (s)
@@ -219,9 +220,21 @@ frb_search --args
 --num_to_plot: How many candidates to plot from file (default 150)
 --mask: Use this flag if you already run rfifind routine and have all the outputs in the same directory as your file
 --save: Use this flag to save the candidates to a PDF file, if not provided, the candidates will be shown one by one.
+--convert_to_fil: convert ARTE logfiles to .fil files
+--bandpass: bandpass to apply to the data (low, high) in MHz
+--time_resolution: time resolution of the data in seconds
+--nchannels: number of frequency channels in the data
+--flip_data: flip the data for conversion in frequency
+--padding: padding to add to the data in frequency channels
+--remove_samples: number of samples to remove from the start of the data for conversion
+--remove_fil: remove the .fil file after conversion and processing
+--prepdata: whether to run the PRESTO prepdata command instead of prepsubband
+--wrap_pdfs: whether to wrap the pdfs into a single pdf file
+--output_dir: directory where to process the fils and store the output files
+--logfiles_dir: directory where the logfiles are stored
 
 
-The output of the frb_search script will be a folder named after the file you processed and it will be in the same directory as your file. Inside this folder there will be a summary.txt file with every command and result obtained, a folder named candidates where the PDF file and the two .csv files are saved, a folder named mask where all files from the rfifind routine are saved and a folder named timeseries_sps where all files from prepsubband and single_pulse_search.py are saved.
+The output of the frb_search script will be a folder named after the file you processed and it will be in the same directory as your file. Inside this folder there will be a summary.txt file with every command and result obtained, two .csv files named "candidates.csv" and "candidates_filtered.csv", a PDF file with the plotted candidates, and two .ps files with a mask used for RFI mitigation and plots showing different properties of the pre-filtered candidates.
 
 Aaaaaaand you are done! Finally inspect the PDF file to see your candidates.
 Hopefully you will find many pulsars/FRBs/Radio Transients!!!!!
