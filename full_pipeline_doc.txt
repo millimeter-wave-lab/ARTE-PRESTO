@@ -38,43 +38,40 @@ For dspsr.sif ask Cristóbal
 
 4. Go to bashrc file and copy the aliases for the commands with your actual path to the .sif or .simg file. Examples of the most used commands, you need to change the path to your actual presto images path and files.
 
---alias radio_transients_latest.sif commands--
+alias header='singularity exec --bind $PWD /media/transferencia/4TBdisk/PRESTO/radio_transients_latest.sif header'
+alias dedisperse='singularity exec --bind $PWD /media/transferencia/4TBdisk/PRESTO/radio_transients_latest.sif dedisperse'
+alias filterbank='singularity exec --bind $PWD /media/transferencia/4TBdisk/PRESTO/radio_transients_latest.sif filterbank'
+alias reader='singularity exec --bind $PWD /media/transferencia/4TBdisk/PRESTO/radio_transients_latest.sif reader'
+alias digifits='singularity exec --bind $PWD /media/transferencia/4TBdisk/PRESTO/radio_transients_latest.sif digifits'
 
-alias header='singularity exec --bind $PWD /home/cristobal.braga/singularity/radio_transients_latest.sif header'
-alias dedisperse='singularity exec --bind $PWD /home/cristobal.braga/singularity/radio_transients_latest.sif dedisperse'
-alias filterbank='singularity exec --bind $PWD /home/cristobal.braga/singularity/radio_transients_latest.sif filterbank'
-alias reader='singularity exec --bind $PWD /home/cristobal.braga/singularity/radio_transients_latest.sif reader'
-alias digifits='singularity exec --bind $PWD /home/cristobal.braga/singularity/radio_transients_latest.sif digifits'
---
 
---alias presto.simg and dspsr.sif commands--
+alias sing='singularity exec --bind $PWD /media/transferencia/4TBdisk/PRESTO/singularity-PRESTO_latest.sif '
+alias rfifind='singularity exec --bind $PWD /media/transferencia/4TBdisk/PRESTO/singularity-PRESTO_latest.sif rfifind'
+alias waterfaller.py='singularity exec --bind $PWD /media/transferencia/4TBdisk/PRESTO/singularity-PRESTO_latest.sif waterfaller.py'
+alias readfile='singularity exec --bind $PWD /media/transferencia/4TBdisk/PRESTO/singularity-PRESTO_latest.sif readfile'
+alias prepdata='singularity exec --bind $PWD /media/transferencia/4TBdisk/PRESTO/singularity-PRESTO_latest.sif prepdata'
+alias prepsubband='singularity exec --bind $PWD /media/transferencia/4TBdisk/PRESTO/singularity-PRESTO_latest.sif prepsubband'
+alias DDplan.py='singularity exec --bind $PWD /media/transferencia/4TBdisk/PRESTO/singularity-PRESTO_latest.sif DDplan.py'
+alias accelsearch='singularity exec --bind $PWD /media/transferencia/4TBdisk/PRESTO/singularity-PRESTO_latest.sif accelsearch'
+alias single_pulse_search.py='singularity exec --bind $PWD /media/transferencia/4TBdisk/PRESTO/singularity-PRESTO_latest.sif single_pulse_search.py'
+alias prepfold='singularity exec --bind $PWD /media/transferencia/4TBdisk/PRESTO/singularity-PRESTO_latest.sif prepfold'
+alias show_pfd='singularity exec --bind $PWD /media/transferencia/4TBdisk/PRESTO/singularity-PRESTO_latest.sif show_pfd'
+alias explorefft='singularity exec --bind $PWD /media/transferencia/4TBdisk/PRESTO/singularity-PRESTO_latest.sif explorefft'
+alias realfft='singularity exec --bind $PWD /media/transferencia/4TBdisk/PRESTO/singularity-PRESTO_latest.sif realfft'
+alias ACCEL_sift.py='singularity exec --bind $PWD /media/transferencia/4TBdisk/PRESTO/singularity-PRESTO_latest.sif ACCEL_sift.py'
+alias get_TOAs.py='singularity exec --bind $PWD /media/transferencia/4TBdisk/PRESTO/singularity-PRESTO_latest.sif get_TOAs.py'
+alias makezaplist.py='singularity exec --bind $PWD /media/transferencia/4TBdisk/PRESTO/singularity-PRESTO_latest.sif makezaplist.py'
 
-alias sing='singularity exec --bind $PWD /home/cristobalb/presto_image/presto.simg '
-alias rfifind='singularity exec --bind $PWD /home/cristobalb/presto_image/presto.simg rfifind'
-alias waterfaller.py='singularity exec --bind $PWD /home/cristobalb/presto_image/presto.simg waterfaller.py'
-alias readfile='singularity exec --bind $PWD /home/cristobalb/presto_image/presto.simg readfile'
-alias prepdata='singularity exec --bind $PWD /home/cristobalb/presto_image/presto.simg prepdata'
-alias prepsubband='singularity exec --bind $PWD /home/cristobalb/presto_image/presto.simg prepsubband'
-alias DDplan.py='singularity exec --bind $PWD /home/cristobalb/presto_image/presto.simg DDplan.py'
-alias accelsearch='singularity exec --bind $PWD /home/cristobalb/presto_image/presto.simg accelsearch'
-alias single_pulse_search.py='singularity exec --bind $PWD /home/cristobalb/presto_image/presto.simg single_pulse_search.py'
-alias prepfold='singularity exec --bind $PWD /home/cristobalb/presto_image/presto.simg prepfold'
-alias show_pfd='singularity exec --bind $PWD /home/cristobalb/presto_image/presto.simg show_pfd'
-alias explorefft='singularity exec --bind $PWD /home/cristobalb/presto_image/presto.simg explorefft'
-alias realfft='singularity exec --bind $PWD /home/cristobalb/presto_image/presto.simg realfft'
-alias ACCEL_sift.py='singularity exec --bind $PWD /home/cristobalb/presto_image/presto.simg ACCEL_sift.py'
-alias get_TOAs.py='singularity exec --bind $PWD /home/cristobalb/presto_image/presto.simg get_TOAs.py'
-alias makezaplist.py='singularity exec --bind $PWD /home/cristobalb/presto_image/presto.simg makezaplist.py'
+alias dspsr='singularity exec --bind $PWD /media/transferencia/4TBdisk/PRESTO/dspsr.sif dspsr'
+alias pazi='singularity exec --bind $PWD /media/transferencia/4TBdisk/PRESTO/dspsr.sif pazi'
+alias paz='singularity exec --bind $PWD /media/transferencia/4TBdisk/PRESTO/dspsr.sif paz'
+alias pam='singularity exec --bind $PWD /media/transferencia/4TBdisk/PRESTO/dspsr.sif pam'
+alias pat='singularity exec --bind $PWD /media/transferencia/4TBdisk/PRESTO/dspsr.sif pat'
+alias pav='singularity exec --bind $PWD /media/transferencia/4TBdisk/PRESTO/dspsr.sif pav'
+alias paas='singularity exec --bind $PWD /media/transferencia/4TBdisk/PRESTO/dspsr.sif paas'
+alias digifil='singularity exec --bind $PWD /media/transferencia/4TBdisk/PRESTO/dspsr.sif  digifil'
 
-alias dspsr='singularity exec --bind $PWD /home/cristobalb/presto_image/dspsr.sif dspsr'
-alias pazi='singularity exec --bind $PWD /home/cristobalb/presto_image/dspsr.sif pazi'
-alias paz='singularity exec --bind $PWD /home/cristobalb/presto_image/dspsr.sif paz'
-alias pam='singularity exec --bind $PWD /home/cristobalb/presto_image/dspsr.sif pam'
-alias pat='singularity exec --bind $PWD /home/cristobalb/presto_image/dspsr.sif pat'
-alias pav='singularity exec --bind $PWD /home/cristobalb/presto_image/dspsr.sif pav'
-alias paas='singularity exec --bind $PWD /home/cristobalb/presto_image/dspsr.sif paas'
-alias digifil='singularity exec --bind $PWD /home/cristobalb/presto_image/dspsr.sif digifil'
---
+
 
 5. After this you should be able to run commands, for example, type rfifind in the terminal, you should get the help message.
 Now here are some examples on how to use presto commands:
