@@ -73,29 +73,28 @@ def identify_rfi(sample_spect):
     """
     #TODO: in the meanwhile we flag the DC values
 
-    # flags = np.arange(87).tolist()
-    # flags = flags+[1024]
+    flags = np.arange(87).tolist()
+    flags = flags+[1024]
 
-    # flags += (np.arange(10)+290).tolist() #1235
-    # flags += (np.arange(10)+225).tolist() #1270
-    # flags += (np.arange(10)+160).tolist() #1250
+    flags += (np.arange(10)+290).tolist() #1235
+    flags += (np.arange(10)+225).tolist() #1270
+    flags += (np.arange(10)+160).tolist() #1250
 
-    # flags += (np.arange(27)+394).tolist()
-    # flags += (np.arange(5)+455).tolist()
-    # flags += (np.arange(4)+1024).tolist()
-    # flags += (np.arange(25)+1135).tolist()
-    # flags += (np.arange(15)+1155).tolist()
-    # flags += (np.arange(12)+1175).tolist()
-    # flags += (np.arange(30)+1210).tolist()
-    # flags += (np.arange(16)+1275).tolist()
-    # flags += (np.arange(18)+1325).tolist()
-    # flags += (np.arange(10)+1367).tolist()
-    # flags += (np.arange(5)+1381).tolist()
-    # flags += (np.arange(40)+1420).tolist() # 1439
-    # flags += (np.arange(296)+1752).tolist()
-    # flags += (np.arange(256)+1792).tolist()
+    flags += (np.arange(27)+394).tolist()
+    flags += (np.arange(5)+455).tolist()
+    flags += (np.arange(4)+1024).tolist()
+    flags += (np.arange(25)+1135).tolist()
+    flags += (np.arange(15)+1155).tolist()
+    flags += (np.arange(12)+1175).tolist()
+    flags += (np.arange(30)+1210).tolist()
+    flags += (np.arange(16)+1275).tolist()
+    flags += (np.arange(18)+1325).tolist()
+    flags += (np.arange(10)+1367).tolist()
+    flags += (np.arange(5)+1381).tolist()
+    flags += (np.arange(40)+1420).tolist() # 1439
+    flags += (np.arange(296)+1752).tolist()
+    flags += (np.arange(256)+1792).tolist()
 
-    flags = []
     return flags
 
 def get_baseline(sample_spect):
@@ -187,7 +186,7 @@ def get_image_data_temperature(filenames,cal_time=1,spect_time=1e-2,file_time=5 
 
         data[i*(spect_size//decimation):(i+1)*(spect_size//decimation),flags] = aux[:,flags]
 
-        data = data[100:,:]
+        data = data[1000:,:]
         mediana = (np.nanmedian(data[:,:],axis=0))
         data_new = np.subtract(data,mediana)
 
@@ -201,7 +200,7 @@ def get_image_data_temperature(filenames,cal_time=1,spect_time=1e-2,file_time=5 
     avg_pow = np.mean(data[:,flags], axis=1)
     avg_pow = moving_average(avg_pow, win_size=win_size)
 
-    data_new/= np.std(data_new[100:,:],axis=0)
+    data_new/= np.std(data_new[1000:,:],axis=0)
 
     snr = np.mean(data_new[:,flags], axis=1)
     snr = moving_average(snr, win_size=win_size)
