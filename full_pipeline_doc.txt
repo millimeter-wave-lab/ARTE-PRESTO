@@ -156,7 +156,7 @@ Or you can download the repository or clone it and then cd to the folder and run
 
 git clone https://github.com/astronomy-laboratory/pulse-simulation.git
 cd path/to/pulse-simulation
-pip install .
+pip install -e .
 
 After this you should create a config.ini file in the config folder following the config_template.ini. presto_image must contain the path to the presto_image (.sif) and the other fields involve the telegram bot, if you don't want to use the bot just leave those fields empty (but the fileds musty be in the config.ini file).
 
