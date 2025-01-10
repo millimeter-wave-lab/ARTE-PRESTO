@@ -183,15 +183,25 @@ def read_fil_block(timestamp, plot_window, filename, dm, downsample, ts=False):
 
       data = fil.read_block(start_sample, samples_left)
       data_dedisp = data.dedisperse(dm.value)
-      data_ = data_dedisp[:, :window_sample]
+      data_dedisp= data_dedisp.downsample(downsample)
+      data_ = data_dedisp.data[:, :window_sample]
       new_size = data_.shape[1] // downsample * downsample
-      data_ = data_[:, :new_size].downsample(downsample)
-    else:
-      data = fil.read_block(start_sample, total_sample)
+      data_ = data_[:, :new_size]
+
+      '''ANTES
+    data = fil.read_block(start_sample, samples_left)
       data_dedisp = data.dedisperse(dm.value)
       data_ = data_dedisp[:, :window_sample]
       new_size = data_.shape[1] // downsample * downsample
       data_ = data_[:, :new_size].downsample(downsample)
+      '''
+    else:
+      data = fil.read_block(start_sample, total_sample)
+      data_dedisp = data.dedisperse(dm.value)
+      data_dedisp= data_dedisp.downsample(downsample)
+      data_ = data_dedisp.data[:, :window_sample]
+      new_size = data_.shape[1] // downsample * downsample
+      data_ = data_[:, :new_size]
     
     return data_, header
 
