@@ -170,7 +170,7 @@ def main():
         start_time = get_mjd()
         
         sigproc_object = write_header_for_fil(
-            '2025-01-10_10:44:07.023723',
+            '2025-01-14=10_41_00.150300.fil',
             #path_save_fil.as_posix(),
             telescope,
             nchannels,
@@ -180,7 +180,7 @@ def main():
             start_time,
             nbits
         )     
-        data = np.load('2025-01-10=10_44_03.023723.npz')['data_full']
+        data = np.load('2025-01-14=10_41_00.150300.npz')['data_full']
         #print(np.shape(data))
         #plt.imshow(data, origin='lower')
         #plt.show()
@@ -189,7 +189,8 @@ def main():
 
         #data = data.astype('float' + str(nbits))
         
-        write_data_to_fil(sigproc_object, path_save_fil.as_posix(), data)
+        #write_data_to_fil(sigproc_object, path_save_fil.as_posix(), data)
+        write_data_to_fil(sigproc_object, '2025-01-14=10_41_00.150300.fil', data)
         print('Final shape:', data.shape) 
         print("File:", filename, "completed!")
 
