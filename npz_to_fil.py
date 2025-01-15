@@ -5,9 +5,71 @@ import os
 import argparse
 import glob
 from astropy import units as apu
+from datetime import datetime
 from astropy.time import Time
 from your.formats.filwriter import make_sigproc_object
 from your import Your
+
+def get_mjd():
+    """
+    Get the current Modified Julian Date (MJD).
+
+    Returns:
+        float: The current MJD.
+    """
+
+    # Datos
+    path_data = Path("/Users/jelu/ARTE/")
+    filename = "2025-01-10=10_44_03.023723"
+    '''
+    full_path = path_data / filename
+    date = full_path.name.split("=")[0]
+    hms = ":".join(full_path.name.split("=")[1].split("_"))
+    '''
+    #start_time = Time("T".join((date, hms)), format="isot", scale="utc", precision=9)
+    start_time = Time('T'.join(('2025-01-10', '10:44:07.023723')), format="isot", scale="utc", precision=9)
+    return start_time.mjd 
+
+def get_output_path(path_output, filename):
+    """
+    Get the output path
+
+    Parameters
+    ----------
+    path_output : str
+        Path to the output
+    filename : str
+        Name of the file
+
+    Returns
+    -------
+    path_save_fil : str
+    """
+
+    
+    #fullpath_without_space = Path(full_path.as_posix().replace(" ", "_"))
+    full_path = path_output / filename
+    full_path = os.path.splitext(full_path)[0]
+    path_save_fil = path_output.joinpath(full_path + ".fil")
+    #path_save_fil_str = "/home/emi/Descargas.fil"
+    #path_save_fil = Path(path_save_fil_str)
+
+    return path_save_fil
+
+def get_frequencies(bandpass, nchannels):
+    """
+    Get the frequencies for the channels
+
+    Parameters
+    ----------  
+    bandpass : tuple or list with the bandpass frequencies in MHz (low, high)
+    nchannels : number of channels
+
+    Returns
+    -------
+    np.linspace(*bandpass, nchannels, endpoint=False)[::-1] : numpy array
+    """
+    return np.linspace(*bandpass, nchannels, endpoint=False)[::-1]
 
 def write_header_for_fil(filename, telescope, nchans, foff, fch1, tsamp, tstart, nbits):
     """
@@ -50,7 +112,6 @@ def write_header_for_fil(filename, telescope, nchans, foff, fch1, tsamp, tstart,
     sigproc_object.write_header(filename)
     return sigproc_object
 
-
 def write_data_to_fil(sigpyproc_object, filename, data):
     """
     Write the data to the filterbank file
@@ -69,35 +130,6 @@ def write_data_to_fil(sigpyproc_object, filename, data):
     """
     sigpyproc_object.append_spectra(spectra = data, filename = filename)
     return 
-
-
-def get_output_path(path_output, filename):
-    """
-    Get the output path
-
-    Parameters
-    ----------
-    path_output : str
-        Path to the output
-    filename : str
-        Name of the file
-
-    Returns
-    -------
-    path_save_fil : str
-    """
-    #fullpath_without_space = Path(full_path.as_posix().replace(" ", "_"))
-    full_path = path_output / filename
-    full_path = os.path.splitext(full_path)[0]
-    path_save_fil = path_output.joinpath(full_path + ".fil")
-    #path_save_fil_str = "/home/emi/Descargas.fil"
-    #path_save_fil = Path(path_save_fil_str)
-
-    return path_save_fil
-
-def get_frequencies(bandpass, nchannels):
-    
-    return np.linspace(*bandpass, nchannels, endpoint=False)[::-1]
 
 def parser_args():
 
@@ -119,7 +151,6 @@ def parser_args():
     return parser.parse_args()
 
 def main():
-
     args = parser_args()
     path_data = Path(args.path_data)
     path_save = Path(args.path_output)
@@ -136,10 +167,11 @@ def main():
         #full_path, start_time = get_date_from_logfile(path_data, filename)
         frequencies = get_frequencies(bandpass, nchannels)
         path_save_fil = get_output_path(path_data, filename)
-        start_time = 0
+        start_time = get_mjd()
         
         sigproc_object = write_header_for_fil(
-            path_save_fil.as_posix(),
+            '2025-01-10_10:44:07.023723',
+            #path_save_fil.as_posix(),
             telescope,
             nchannels,
             bandwidth/nchannels,
@@ -148,14 +180,14 @@ def main():
             start_time,
             nbits
         )     
-
-        data = np.load(filename)['data_full']
+        data = np.load('2025-01-10=10_44_03.023723.npz')['data_full']
         #print(np.shape(data))
         #plt.imshow(data, origin='lower')
         #plt.show()
         data=np.transpose(data)
         print(np.shape(data))
-        data = data.astype('float' + str(nbits))
+
+        #data = data.astype('float' + str(nbits))
         
         write_data_to_fil(sigproc_object, path_save_fil.as_posix(), data)
         print('Final shape:', data.shape) 
